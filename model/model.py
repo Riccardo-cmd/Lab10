@@ -13,6 +13,18 @@ class Model:
         guadagno medio per spedizione >= threshold (euro)
         """
         # TODO
+        self.G.clear()
+        tratte = self.DAO.readDisponibili(threshold)
+
+        for tratta in tratte:
+            u = tratta[0]
+            v = tratta[1]
+            peso = tratta["valore"]
+            n_sped = tratta["numero_spedizioni"]
+            self.G.add_edge(u, v, weight=peso, count=n_sped)
+
+
+
 
     def get_num_edges(self):
         """
