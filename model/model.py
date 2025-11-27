@@ -3,6 +3,7 @@ import networkx as nx
 
 class Model:
     def __init__(self):
+        self._dao = DAO()
         self._nodes = None
         self._edges = None
         self.G = nx.Graph()
@@ -14,7 +15,7 @@ class Model:
         """
         # TODO
         self.G.clear()
-        tratte = self.DAO.readDisponibili(threshold)
+        tratte = self._dao.readDisponibili(threshold)
 
         for tratta in tratte:
             u = tratta[0]
@@ -23,22 +24,20 @@ class Model:
             n_sped = tratta["numero_spedizioni"]
             self.G.add_edge(u, v, weight=peso, count=n_sped)
 
-
-
-
     def get_num_edges(self):
         """
         Restituisce il numero di Tratte (edges) del grafo
         :return: numero di edges del grafo
         """
         # TODO
-
+        return self.G.number_of_edges()
     def get_num_nodes(self):
         """
         Restituisce il numero di Hub (nodi) del grafo
         :return: numero di nodi del grafo
         """
         # TODO
+        return self.G.number_of_nodes()
 
     def get_all_edges(self):
         """
@@ -46,4 +45,7 @@ class Model:
         :return: gli edges del grafo con gli attributi (il weight)
         """
         # TODO
+        return self.G.edges(data=True)
+
+
 

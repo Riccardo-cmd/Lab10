@@ -7,16 +7,20 @@ class DAO:
     # TODO
     def readDisponibili(self,valore):
         conn = DBConnect.get_connection()
-        query = """ SELECT LEAST(id_hub_origine, id_hub_destinazione) AS ID1,
-                    GREATEST (id_hub_origine, id_hub_destinazione) AS ID2,
-                    AVG(valore_merce) AS valore,
-                    COUNT * AS numero_spedizioni,
-                    FROM spedizione
-                    GROUP BY LEAST(id_hub_origine, id_hub_destinazione),
-                    GREATEST (id_hub_origine, id_hub_destinazione)
-                    HAVING valore >= %s
-                    """
-        cursor = conn.cursor()
+        query = """
+                SELECT 
+                    LEAST(id_hub_origine, id_hub_destinazione) as ID1, 
+                    GREATEST(id_hub_origine, id_hub_destinazione) as ID2, 
+                    AVG(valore_merce) as valore,
+                    COUNT(*) as numero_spedizioni
+                FROM spedizione
+                GROUP BY 
+                    LEAST(id_hub_origine, id_hub_destinazione), 
+                    GREATEST(id_hub_origine, id_hub_destinazione)
+                HAVING valore >= %s
+                """
+        print(query)
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(query, (valore,))
 
         result = []
