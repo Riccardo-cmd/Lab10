@@ -48,14 +48,17 @@ class Controller:
 
         # Itero su tutti gli archi per mostrarli
         # u = nodo1, v = nodo2, data = dizionario attributi ({'weight': ..., 'count': ...})
-        for u, v, data in tratte:
+        for i, (u, v, data) in enumerate(tratte, start=1):
             peso = data.get('weight', 0)  # Guadagno medio
-            num = data.get('count', 0)  # Numero spedizioni (nome che hai scelto nel model)
+            num = data.get('count', 0)
 
-            # Creo la stringa formattata
-            testo_tratta = f"{u} <-> {v} | Valore: {peso:.2f} € | Spedizioni: {num}"
+            # Traduzione da id a nome
+            nome_u = self._model.get_nome_hub(u)
+            nome_v = self._model.get_nome_hub(v)
 
-            # Aggiungo alla lista
+            # stringa formattata
+            testo_tratta = f"{i}) {nome_u} <-> {nome_v} | Guadagno medio per spedizione: {peso:.2f} € | Spedizioni: {num}"
+
             self._view.lista_visualizzazione.controls.append(ft.Text(testo_tratta))
 
         # 5. Aggiorno la pagina per rendere visibili le modifiche

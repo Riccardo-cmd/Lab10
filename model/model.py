@@ -7,6 +7,8 @@ class Model:
         self._nodes = None
         self._edges = None
         self.G = nx.Graph()
+        self._idMap = {}
+        self._load_hubs()
 
     def costruisci_grafo(self, threshold):
         """
@@ -18,11 +20,16 @@ class Model:
         tratte = self._dao.readDisponibili(threshold)
 
         for tratta in tratte:
-            u = tratta[0]
-            v = tratta[1]
+            u = tratta["ID1"]
+            v = tratta["ID2"]
             peso = tratta["valore"]
             n_sped = tratta["numero_spedizioni"]
             self.G.add_edge(u, v, weight=peso, count=n_sped)
+
+    def _load_hubs(self):
+        hubs = self._dao.get_all_hubs()
+        for hub in hubs:
+            self._idMap[hub["id_hub"]] = f"{hub['nome_hub']} ({hub['stato_hub']})"
 
     def get_num_edges(self):
         """
@@ -46,6 +53,9 @@ class Model:
         """
         # TODO
         return self.G.edges(data=True)
+
+    def get_nome_hub(self, id_hub):
+        return self._idMap.get(id_hub, str(id_hub))
 
 
 

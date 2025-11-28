@@ -19,7 +19,6 @@ class DAO:
                     GREATEST(id_hub_origine, id_hub_destinazione)
                 HAVING valore >= %s
                 """
-        print(query)
         cursor = conn.cursor(dictionary=True)
         cursor.execute(query, (valore,))
 
@@ -29,4 +28,20 @@ class DAO:
 
         cursor.close()
         conn.close()
+        return result
+
+    def get_all_hubs(self):
+        cnx = DBConnect.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+
+        query = ("""SELECT id AS id_hub, nome AS nome_hub, stato AS stato_hub
+                    FROM hub""")
+
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        cursor.close()
+        cnx.close()
         return result
